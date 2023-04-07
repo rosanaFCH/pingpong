@@ -166,7 +166,7 @@ function updatePaddlePositions() {
         }
 
 
-function draw() {
+	function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     updatePaddlePositions();
@@ -187,13 +187,15 @@ function draw() {
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 
-	
-	// update the ball speed incrementaly
-	
-	if (ballX + ballRadius > canvas.width) {
+    // Update the game logic to detect when a player scores
+    if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
+        ballSpeedY = -ballSpeedY;
+    }
+
+    if (ballX + ballRadius > canvas.width) {
         if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
             // Ball hits the right paddle
-            ballSpeedX = -ballSpeedX * speedIncreaseFactor;
+            ballSpeedX = -ballSpeedX;
         } else {
             // Left player scores
             leftPlayerScore++;
@@ -202,14 +204,18 @@ function draw() {
     } else if (ballX - ballRadius < 0) {
         if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
             // Ball hits the left paddle
-            ballSpeedX = -ballSpeedX * speedIncreaseFactor;
+            ballSpeedX = -ballSpeedX;
         } else {
             // Right player scores
             rightPlayerScore++;
             checkWinCondition();
         }
     }
-	
+
+    requestAnimationFrame(draw);
+}
+
+
 	
 	
 
