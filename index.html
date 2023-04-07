@@ -165,7 +165,8 @@ function updatePaddlePositions() {
             ctx.fillText(rightPlayerScore, (canvas.width / 4) * 3, 30);
         }
 
-
+	
+	
 	function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -199,6 +200,7 @@ function updatePaddlePositions() {
         } else {
             // Left player scores
             leftPlayerScore++;
+            resetBall();
             checkWinCondition();
         }
     } else if (ballX - ballRadius < 0) {
@@ -208,6 +210,7 @@ function updatePaddlePositions() {
         } else {
             // Right player scores
             rightPlayerScore++;
+            resetBall();
             checkWinCondition();
         }
     }
@@ -215,9 +218,11 @@ function updatePaddlePositions() {
     requestAnimationFrame(draw);
 }
 
-
-	
-	
+		
+		
+		
+		
+		
 
     // Update the game logic to detect when a player scores
     if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
