@@ -186,6 +186,37 @@ function draw() {
 
     ballX += ballSpeedX;
     ballY += ballSpeedY;
+	
+	let ballSpeedX = 4;
+        let ballSpeedY = 4;
+  
+	const speedIncreaseFactor = 1.1;
+
+	
+	// update the ball speed incrementaly
+	
+	if (ballX + ballRadius > canvas.width) {
+        if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+            // Ball hits the right paddle
+            ballSpeedX = -ballSpeedX * speedIncreaseFactor;
+        } else {
+            // Left player scores
+            leftPlayerScore++;
+            checkWinCondition();
+        }
+    } else if (ballX - ballRadius < 0) {
+        if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+            // Ball hits the left paddle
+            ballSpeedX = -ballSpeedX * speedIncreaseFactor;
+        } else {
+            // Right player scores
+            rightPlayerScore++;
+            checkWinCondition();
+        }
+    }
+	
+	
+	
 
     // Update the game logic to detect when a player scores
     if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
