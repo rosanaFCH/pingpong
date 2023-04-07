@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,26 +24,18 @@
 		
 		#paragraph {
 		font-family: Arial, sans-serif;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: normal;
             color: #000;
-            padding-bottom:30px;
+            padding-bottom:60px;
 		}
-		
-		#subtitle {
-		font-family: Arial, sans-serif;
-            font-size: 18px;
-            font-weight: bold;
-            color: #000;
-            padding-bottom:30px;
-		}
-        
-        
-        /* Style the canvas */
-        #gameCanvas {
-            border: 1px solid #000;
-            background-color:#b9f7ff;
-        }
+
+/* Style the canvas */
+#gameCanvas {
+  border: 1px solid #000;
+  background: linear-gradient(to right, #C4E881 50%, #b9f7ff 50%); /* Set the background to half green and half blue */
+}
+
 
         /* Style the start button */
         #startGameButton {
@@ -66,12 +59,15 @@
         }
 
         /* Style the game over text */
-        .gameOverText {
-            font-family: Arial, sans-serif;
-            font-size: 32px;
-            font-weight: bold;
-            color: #000;
-        }
+       .gameOverText {
+  font-family: Arial, sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #000;
+  position: relative; /* Set the position property to relative to enable top offset */
+  top: -100px; /* Move the element up by 40 pixels */
+}
+
         
         /* Media query for gameCanvas */
         @media screen and (max-width: 700px) {
@@ -85,11 +81,10 @@
 </head>
 <body>
     <div id="gameContainer">
-    	<div id="title">Welcome to Rosana's pingpong game made with the help of ChatGPT4</div>
-    	<div id="subtitle">Desktop</div>
-    	<div id="paragraph">Left player: use W and S keys <br> Right player: use Up and Down keys</div>
-    	<div id="subtitle">Mobile</div>
-    	<div id="paragraph">Touch left and right side of the game</div>
+    	<div id="title">Welcome to Rosana's 1st EVER PingPong Game!</div>
+		<div id="paragraph">Done with the assistant of ChatGPT4 <br>
+				Keyboard: Left player W / S. Right player up / down <br>
+				Mobile touch left / right side of the game.</div>
         <canvas id="gameCanvas" width="600" height="400"></canvas>
         <button id="startGameButton">Start Game</button>
     </div>
@@ -130,12 +125,16 @@ function drawPaddle(x, y) {
 }
 
 function drawBall(x, y) {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = 'black';
-    ctx.fill();
-    ctx.closePath();
+  ctx.beginPath();
+  ctx.arc(x, y, ballRadius + 4, 0, Math.PI * 4); // Increase the ball size
+  ctx.strokeStyle = 'black'; // Change the ball border color
+  ctx.lineWidth = 6; // Increase the ball border width 
+  ctx.stroke();
+  ctx.fillStyle = 'black'; // Change the ball color
+  ctx.fill();
+  ctx.closePath();
 }
+
 
 function updatePaddlePositions() {
     if (leftPaddleUp && leftPaddleY > 0) {
