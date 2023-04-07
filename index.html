@@ -260,11 +260,67 @@ document.addEventListener('keyup', (e) => {
 });
 
 
+// Add touch event listeners for mobile devices
+canvas.addEventListener('touchstart', handleTouchStart);
+canvas.addEventListener('touchmove', handleTouchMove);
+canvas.addEventListener('touchend', handleTouchEnd);
+
+// Variables to store the current touch positions
+let leftTouchY = null;
+let rightTouchY = null;
+
+// Touch event handlers
+function handleTouchStart(e) {
+    e.preventDefault();
+    for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        if (touch.clientX < canvas.width / 2) {
+            leftTouchY = touch.clientY;
+        } else {
+            rightTouchY = touch.clientY;
+        }
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault();
+    for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        if (touch.clientX < canvas.width / 2) {
+            if (leftTouchY !== null) {
+                const deltaY = touch.clientY - leftTouchY;
+                leftPaddleY += deltaY;
+                leftTouchY = touch.clientY;
+            }
+        } else {
+            if (rightTouchY !== null) {
+                const deltaY = touch.clientY - rightTouchY;
+                rightPaddleY += deltaY;
+                rightTouchY = touch.clientY;
+            }
+        }
+    }
+}
+
+function handleTouchEnd(e) {
+    e.preventDefault();
+    for (let i = 0; i < e.changedTouches.length; i++) {
+        const touch = e.changedTouches[i];
+        if (touch.clientX < canvas.width / 2) {
+            leftTouchY = null;
+        } else {
+            rightTouchY = null;
+        }
+    }
+}
+
+
 // Add an event listener for the start game button
 document.getElementById('startGameButton').addEventListener('click', restartGame);
 
 // Start the game when the page loads
 startGame();
+
 
     </script>
 </body>
