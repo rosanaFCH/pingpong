@@ -164,7 +164,9 @@ function updatePaddlePositions() {
             ctx.fillText(leftPlayerScore, canvas.width / 4, 30);
             ctx.fillText(rightPlayerScore, (canvas.width / 4) * 3, 30);
         }
-
+  
+	
+	
 	
 	
 	function draw() {
@@ -200,8 +202,8 @@ function updatePaddlePositions() {
         } else {
             // Left player scores
             leftPlayerScore++;
-            resetBall();
             checkWinCondition();
+            resetBall();
         }
     } else if (ballX - ballRadius < 0) {
         if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
@@ -210,55 +212,13 @@ function updatePaddlePositions() {
         } else {
             // Right player scores
             rightPlayerScore++;
-            resetBall();
             checkWinCondition();
+            resetBall();
         }
     }
 
     requestAnimationFrame(draw);
 }
-
-		
-		
-		
-		
-		
-
-    // Update the game logic to detect when a player scores
-    if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
-        ballSpeedY = -ballSpeedY;
-    }
-
-    if (ballX + ballRadius > canvas.width) {
-        if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
-            // Ball hits the right paddle
-            ballSpeedX = -ballSpeedX;
-        } else {
-            // Left player scores
-            leftPlayerScore++;
-            resetBall();
-            checkWinCondition();
-        }
-    } else if (ballX - ballRadius < 0) {
-        if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
-            // Ball hits the left paddle
-            ballSpeedX = -ballSpeedX;
-        } else {
-            // Right player scores
-            rightPlayerScore++;
-            resetBall();
-            checkWinCondition();
-        }
-    }
-
-    requestAnimationFrame(draw);
-}
-
-	
-	
-	
-	
-	
 	
 	
 	
@@ -305,6 +265,15 @@ function startGame() {
     // Start the game loop
     draw();
 }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 // Event listeners for 'keydown' and 'keyup' events
 document.addEventListener('keydown', (e) => {
