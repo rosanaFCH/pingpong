@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Style the container */
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding:20px;
+        }
+        
+        /* Style the title / paragraph */
+
+		#title {
+		font-family: Arial, sans-serif;
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+            padding-bottom:30px;
+		}
+		
+		#paragraph {
+		font-family: Arial, sans-serif;
+            font-size: 18px;
+            font-weight: normal;
+            color: #000;
+            padding-bottom:30px;
+		}
+        
+        /* Style the canvas */
+        #gameCanvas {
+            border: 1px solid #000;
+            background-color:#b9f7ff;
+        }
+
+        /* Style the start button */
+        #startGameButton {
+         	margin-top: 10px;
+    		padding: 10px 20px;
+    		font-size: 18px;
+    		cursor: pointer;
+    		background-color: #fe9bbc;
+    		border-width: 2px;
+    		border-radius: 6px;
+    		border-color: black;
+    		border-style: solid;
+        }
+
+        /* Style the player scores */
+        .playerScore {
+            font-family: Arial, sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* Style the game over text */
+        .gameOverText {
+            font-family: Arial, sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+        }
+        
+        /* Media query for gameCanvas */
+        @media screen and (max-width: 700px) {
+            #gameCanvas {
+                width: 100%;
+                height: 50vw;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+    	<div id="title">Welcome to Rosana's pingpong game made with the help of ChatGPT4</div>
+    	<div id="paragraph">Left player: use W and S keys <br> Right player: use Up and Down keys</div>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+        <button id="startGameButton">Start Game</button>
+    </div>
+
+<script>
+        
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const paddleWidth = 10;
+const paddleHeight = 100;
+const ballRadius = 5;
+const paddleSpeed = 4;
+
+let leftPaddleY = (canvas.height - paddleHeight) / 2;
+let rightPaddleY = (canvas.height - paddleHeight) / 2;
+let ballX = canvas.width / 2;
+let ballY = canvas.height / 2;
+let ballSpeedX = 2;
+let ballSpeedY = 2;
+
+let leftPaddleUp = false;
+let leftPaddleDown = false;
+let rightPaddleUp = false;
+let rightPaddleDown = false;
+
+// Add new variables for player scores and winning score
+let leftPlayerScore = 0;
+let rightPlayerScore = 0;
+const winningScore = 5;
+
+// Add a variable to check if the game is over
+let gameOver = false;
+
+function drawPaddle(x, y) {
+    ctx.fillStyle = 'black';
+    ctx.fillRect(x, y, paddleWidth, paddleHeight);
+}
+
+function drawBall(x, y) {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    ctx.closePath();
+}
+
+function updatePaddlePositions() {
+    if (leftPaddleUp && leftPaddleY > 0) {
+        leftPaddleY -= paddleSpeed;
+    }
+
+    if (leftPaddleDown && leftPaddleY < canvas.height - paddleHeight) {
+        leftPaddleY += paddleSpeed;
+    }
+
+    if (rightPaddleUp && rightPaddleY > 0) {
+        rightPaddleY -= paddleSpeed;
+    }
+
+    if (rightPaddleDown && rightPaddleY < canvas.height - paddleHeight) {
+        rightPaddleY += paddleSpeed;
+    }
+}
+
+// Add the drawScores function
+        function drawScores() {
+            ctx.font = '24px Arial';
+            ctx.fillStyle = 'black';
+            ctx.fillText(leftPlayerScore, canvas.width / 4, 30);
+            ctx.fillText(rightPlayerScore, (canvas.width / 4) * 3, 30);
+        }
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    updatePaddlePositions();
+
+    drawPaddle(0, leftPaddleY);
+    drawPaddle(canvas.width - paddleWidth, rightPaddleY);
+    drawBall(ballX, ballY);
+    drawScores();
+
+    // Add the game over condition
+        if (gameOver) {
+            ctx.font = '48px Arial';
+            ctx.fillStyle = 'black';
+            ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
+            return;
+        }
+
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+        // Update the game logic to detect when a player scores
+    if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
+        ballSpeedY = -ballSpeedY;
+    }
+
+    if (ballX + ballRadius > canvas.width) {
+        // Left player scores
+        leftPlayerScore++;
+        checkWinCondition();
+        resetBall();
+    } else if (ballX - ballRadius < 0) {
+        // Right player scores
+        rightPlayerScore++;
+        checkWinCondition();
+        resetBall();
+    }
+
+    requestAnimationFrame(draw);
+}
+
+// Add a new restart game function
+
+function restartGame() {
+    if (!gameOver) {
+        return;
+    }
+
+    // Reset scores
+    leftPlayerScore = 0;
+    rightPlayerScore = 0;
+
+    // Reset game state
+    gameOver = false;
+
+    // Start the game
+    draw();
+}
+
+
+// Randomize the initial vertical speed
+function resetBall() {
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+    ballSpeedX = -ballSpeedX;
+    ballSpeedY = Math.random() * 4 - 2;
+}
+
+
+// Add a function to check the win condition
+function checkWinCondition() {
+    if (leftPlayerScore >= winningScore || rightPlayerScore >= winningScore) {
+        gameOver = true;
+    }
+}
+
+// Add a startGame function to initialize the game
+function startGame() {
+    // Start the game loop
+    draw();
+}
+
+// Event listeners for 'keydown' and 'keyup' events
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'w' || e.key === 'W') {
+        leftPaddleUp = true;
+    } else if (e.key === 's' || e.key === 'S') {
+        leftPaddleDown = true;
+    } else if (e.key === 'ArrowUp') {
+        rightPaddleUp = true;
+    } else if (e.key === 'ArrowDown') {
+        rightPaddleDown = true;
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    if (e.key === 'w' || e.key === 'W') {
+        leftPaddleUp = false;
+    } else if (e.key === 's' || e.key === 'S') {
+        leftPaddleDown = false;
+    } else if (e.key === 'ArrowUp') {
+        rightPaddleUp = false;
+    } else if (e.key === 'ArrowDown') {
+        rightPaddleDown = false;
+    }
+});
+
+
+// Add an event listener for the start game button
+document.getElementById('startGameButton').addEventListener('click', restartGame);
+
+// Start the game when the page loads
+startGame();
+
+    </script>
+</body>
+</html>
