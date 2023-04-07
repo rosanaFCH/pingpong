@@ -177,6 +177,16 @@ function updatePaddlePositions() {
     drawPaddle(0, leftPaddleY);
     drawPaddle(canvas.width - paddleWidth, rightPaddleY);
     drawBall(ballX, ballY);
+		
+		
+		
+		// Draw the ball only if the game is not over
+if (!gameOver) {
+    drawBall(ballX, ballY);
+}
+
+		
+		
     drawScores();
 
     // Add the game over condition
