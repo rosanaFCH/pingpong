@@ -154,6 +154,9 @@ function updatePaddlePositions() {
     }
 }
 
+	
+	
+	
 // Add the drawScores function
         function drawScores() {
             ctx.font = '24px Arial';
@@ -161,6 +164,7 @@ function updatePaddlePositions() {
             ctx.fillText(leftPlayerScore, canvas.width / 4, 30);
             ctx.fillText(rightPlayerScore, (canvas.width / 4) * 3, 30);
         }
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -173,35 +177,56 @@ function draw() {
     drawScores();
 
     // Add the game over condition
-        if (gameOver) {
-            ctx.font = '48px Arial';
-            ctx.fillStyle = 'black';
-            ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
-            return;
-        }
+    if (gameOver) {
+        ctx.font = '48px Arial';
+        ctx.fillStyle = 'black';
+        ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
+        return;
+    }
 
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 
-        // Update the game logic to detect when a player scores
+    // Update the game logic to detect when a player scores
     if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
         ballSpeedY = -ballSpeedY;
     }
 
     if (ballX + ballRadius > canvas.width) {
-        // Left player scores
-        leftPlayerScore++;
-        checkWinCondition();
-        resetBall();
+        if (ballY > rightPaddleY && ballY < rightPaddleY + paddleHeight) {
+            // Ball hits the right paddle
+            ballSpeedX = -ballSpeedX;
+        } else {
+            // Left player scores
+            leftPlayerScore++;
+            resetBall();
+            checkWinCondition();
+        }
     } else if (ballX - ballRadius < 0) {
-        // Right player scores
-        rightPlayerScore++;
-        checkWinCondition();
-        resetBall();
+        if (ballY > leftPaddleY && ballY < leftPaddleY + paddleHeight) {
+            // Ball hits the left paddle
+            ballSpeedX = -ballSpeedX;
+        } else {
+            // Right player scores
+            rightPlayerScore++;
+            resetBall();
+            checkWinCondition();
+        }
     }
 
     requestAnimationFrame(draw);
 }
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 // Add a new restart game function
 
