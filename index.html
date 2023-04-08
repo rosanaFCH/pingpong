@@ -3,88 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Ping Pong Game</title>
+    
     <style>
-        /* Style the container */
+        /* Style the containers */
+
         #gameContainer {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding:20px;
+            padding:30px;
         }
         
-        /* Style the title / paragraph */
+        #introContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding:20px;
+            margin-bottom:20px;
+        }
+        
+      
+      /* style touch areas */
+
+     #leftTouchArea, #rightTouchArea {
+         position: absolute;
+         height: 500px; /* adjust this value to set the desired touch area height */
+         z-index: -1;
+         top: 600px; /* set the touch areas to start below the canvas */
+}
+
+      #leftTouchArea {
+          left: 0;
+          width: 90px;
+          background-color:#ccc;
+}
+
+      #rightTouchArea {
+          right: 0;
+          width: 90px;
+          background-color:#ccc;
+}
+	
+	/* Media query for gameCanvas */
+    
+@media screen and (max-width: 1024px) {
+    #gameCanvas {
+        width: 100%;
+        height: 50vw;
+    }
+
+    #leftTouchArea, #rightTouchArea {
+        top: 50vw;
+    }
+ }
+	
+	/* Style the title / paragraph */
 
 		#title {
-		font-family: Arial, sans-serif;
-            font-size: 22px;
+		    font-family: Arial, sans-serif;
+            font-size: 18px;
             font-weight: bold;
             color: #000;
-            padding-bottom:30px;
+            padding-bottom:10px;
 		}
 		
 		#paragraph {
-		font-family: Arial, sans-serif;
-            font-size: 16px;
+		    font-family: Arial, sans-serif;
+            font-size: 14px;
             font-weight: normal;
+            text-align:center;
             color: #000;
-            padding-bottom:60px;
+            padding-bottom:10px;
 		}
+	
+	
+	/* Style the canvas */
 
-/* Style the canvas */
-#gameCanvas {
-  border: 1px solid #000;
-  background: linear-gradient(to right, #C4E881 50%, #b9f7ff 50%); /* Set the background to half green and half blue */
+        #gameCanvas {
+            border: 1px solid #000;
+            background: linear-gradient(to right, #C4E881 50%, #b9f7ff 50%);
 }
 
-
-        /* Style the start button */
+/* Style the start button */
+        
         #startGameButton {
          	margin-top: 10px;
     		padding: 10px 20px;
-    		font-size: 18px;
+    		font-size: 16px;
     		cursor: pointer;
-    		background-color: #fe9bbc;
+    		background-color: #000;
     		border-width: 2px;
     		border-radius: 6px;
     		border-color: black;
     		border-style: solid;
+            color: white;
         }
 
-        /* Style the player scores */
-        .playerScore {
-            font-family: Arial, sans-serif;
-            font-size: 24px;
-            font-weight: bold;
-            color: #000;
-        }
-
-        /* Style the game over text */
-       .gameOverText {
-  font-family: Arial, sans-serif;
-  font-size: 32px;
-  font-weight: bold;
-  color: #000;
-  position: relative; /* Set the position property to relative to enable top offset */
-  top: -100px; /* Move the element up by 40 pixels */
-}
-
-        
-        /* Media query for gameCanvas */
-        @media screen and (max-width: 700px) {
-            #gameCanvas {
-                width: 100%;
-                height: 50vw;
-            }
-        }
-        
     </style>
+    
 </head>
+
 <body>
+    <div id="introContainer">
+
+        <div id="title">Retro New PingPong Game</div>
+		<div id="paragraph">Made by RF with the assistance of ChatGPT4 to proof how AI can help us amplify capacity.</div>
+		<div id="paragraph">Keyboard Left W and S keys. Right up and down keys. Mobile: touch screen. </div>
+        </div>
+
     <div id="gameContainer">
-    	<div id="title">Welcome to Rosana's 1st EVER PingPong Game!</div>
-		<div id="paragraph">Done with the assistance of ChatGPT-4 to demonstrate how AI can help us amplify productivity & capacity.</div>
-		<div id="paragraph">To play, use the keyboard: Left W and S keys. Right up & down keys. <br>
-				Or use your phone; touch left and right side of the game.</div>
+        
+        <div id="leftTouchArea"></div>
+        <div id="rightTouchArea"></div>
+        
         <canvas id="gameCanvas" width="600" height="400"></canvas>
         <button id="startGameButton">Start Game</button>
     </div>
@@ -177,8 +210,8 @@ function updatePaddlePositions() {
             ctx.fillText(rightPlayerScore, (canvas.width / 4) * 3, 30);
         }
   
-	
-	function draw() {
+
+function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     updatePaddlePositions();
@@ -192,20 +225,18 @@ function updatePaddlePositions() {
     if (gameOver) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawScores();
-        ctx.font = '48px Arial';
+        ctx.font = '40px Arial';
         ctx.fillStyle = 'black';
         ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
         return;
     }
 
-		
     drawScores();
 
     ballX += ballSpeedX;
     ballY += ballSpeedY;
 	
-
-    // Update the game logic to detect when a player scores
+ // Update the game logic to detect when a player scores
     if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
         ballSpeedY = -ballSpeedY;
     }
@@ -246,7 +277,8 @@ function restartGame() {
     gameOver = false;
     resetBall();
 
-    // Reset paddles to their initial position
+// Reset paddles to their initial position
+
     leftPaddleY = (canvas.height - paddleHeight) / 2;
     rightPaddleY = (canvas.height - paddleHeight) / 2;
 
@@ -255,6 +287,7 @@ function restartGame() {
 
 
 // Randomize the initial vertical speed
+
 function resetBall() {
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
@@ -266,8 +299,8 @@ function resetBall() {
     } while (Math.abs(ballSpeedY) < 0.5);
 }
 
-	
 // Add a function to check the win condition
+
 function checkWinCondition() {
     if (leftPlayerScore >= winningScore || rightPlayerScore >= winningScore) {
         gameOver = true;
@@ -306,21 +339,31 @@ document.addEventListener('keyup', (e) => {
     }
 });
 
-// Add touch event listeners for mobile devices
-canvas.addEventListener('touchstart', handleTouchStart);
-canvas.addEventListener('touchmove', handleTouchMove);
-canvas.addEventListener('touchend', handleTouchEnd);
+// Add start touch area outside canvas
+
+const leftTouchArea = document.getElementById('leftTouchArea');
+const rightTouchArea = document.getElementById('rightTouchArea');
+
+leftTouchArea.addEventListener('touchstart', (e) => handleTouchStart(e, 'left'));
+leftTouchArea.addEventListener('touchmove', (e) => handleTouchMove(e, 'left'));
+leftTouchArea.addEventListener('touchend', (e) => handleTouchEnd(e, 'left'));
+
+rightTouchArea.addEventListener('touchstart', (e) => handleTouchStart(e, 'right'));
+rightTouchArea.addEventListener('touchmove', (e) => handleTouchMove(e, 'right'));
+rightTouchArea.addEventListener('touchend', (e) => handleTouchEnd(e, 'right'));
+
 
 // Variables to store the current touch positions
 let leftTouchY = null;
 let rightTouchY = null;
 
 // Touch event handlers
-function handleTouchStart(e) {
+
+function handleTouchStart(e, side) {
     e.preventDefault();
     for (let i = 0; i < e.touches.length; i++) {
         const touch = e.touches[i];
-        if (touch.clientX < canvas.width / 2) {
+        if (side === "left") {
             leftTouchY = touch.clientY;
         } else {
             rightTouchY = touch.clientY;
@@ -328,11 +371,11 @@ function handleTouchStart(e) {
     }
 }
 
-function handleTouchMove(e) {
+function handleTouchMove(e, side) {
     e.preventDefault();
     for (let i = 0; i < e.touches.length; i++) {
         const touch = e.touches[i];
-        if (touch.clientX < canvas.width / 2) {
+        if (side === "left") {
             if (leftTouchY !== null) {
                 const deltaY = touch.clientY - leftTouchY;
                 leftPaddleY += deltaY;
@@ -348,11 +391,11 @@ function handleTouchMove(e) {
     }
 }
 
-function handleTouchEnd(e) {
+function handleTouchEnd(e, side) {
     e.preventDefault();
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
-        if (touch.clientX < canvas.width / 2) {
+        if (side === "left") {
             leftTouchY = null;
         } else {
             rightTouchY = null;
