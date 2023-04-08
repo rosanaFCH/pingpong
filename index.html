@@ -236,24 +236,23 @@ function updatePaddlePositions() {
 }
 	
 
-// Add a new restart game function
+// Add a start game function
 
 function restartGame() {
-    if (!gameOver) {
-        return;
-    }
+    if (!gameOver) return;
 
-    // Reset scores
     leftPlayerScore = 0;
     rightPlayerScore = 0;
-
-    // Reset game state
     gameOver = false;
+    resetBall();
 
-    // Start the game
-    draw();
+    // Reset paddles to their initial position
+    leftPaddleY = (canvas.height - paddleHeight) / 2;
+    rightPaddleY = (canvas.height - paddleHeight) / 2;
+
+    startGame();
 }
-	
+
 
 // Randomize the initial vertical speed
 function resetBall() {
