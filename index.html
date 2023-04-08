@@ -155,6 +155,20 @@ function updatePaddlePositions() {
 }
 
 	
+	
+    // Add initial draw function to show paddles ball scores in the initial screen
+	
+    function initialDraw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawPaddle(0, leftPaddleY);
+    drawPaddle(canvas.width - paddleWidth, rightPaddleY);
+    drawBall(ballX, ballY);
+    drawScores();
+}
+
+   
+	
 // Add the drawScores function
         function drawScores() {
             ctx.font = '24px Arial';
@@ -163,9 +177,6 @@ function updatePaddlePositions() {
             ctx.fillText(rightPlayerScore, (canvas.width / 4) * 3, 30);
         }
   
-	
-	
-
 	
 	function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -192,9 +203,6 @@ function updatePaddlePositions() {
 
     ballX += ballSpeedX;
     ballY += ballSpeedY;
-	
-	
-
 	
 
     // Update the game logic to detect when a player scores
@@ -227,10 +235,6 @@ function updatePaddlePositions() {
     requestAnimationFrame(draw);
 }
 	
-	
-	
-	
-	
 
 // Add a new restart game function
 
@@ -250,8 +254,6 @@ function restartGame() {
     draw();
 }
 	
-	
-	
 
 // Randomize the initial vertical speed
 function resetBall() {
@@ -266,7 +268,6 @@ function resetBall() {
 }
 
 	
-	
 // Add a function to check the win condition
 function checkWinCondition() {
     if (leftPlayerScore >= winningScore || rightPlayerScore >= winningScore) {
@@ -279,15 +280,7 @@ function startGame() {
     // Start the game loop
     draw();
 }
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 
 // Event listeners for 'keydown' and 'keyup' events
 document.addEventListener('keydown', (e) => {
