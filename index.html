@@ -155,8 +155,6 @@ function updatePaddlePositions() {
 }
 
 	
-	
-	
 // Add the drawScores function
         function drawScores() {
             ctx.font = '24px Arial';
@@ -167,7 +165,7 @@ function updatePaddlePositions() {
   
 	
 	
-	
+
 	
 	function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -179,26 +177,25 @@ function updatePaddlePositions() {
     drawBall(ballX, ballY);
 		
 		
-		
-		// Draw the ball only if the game is not over
-if (!gameOver) {
-    drawBall(ballX, ballY);
-}
-
-		
-		
-    drawScores();
-
     // Add the game over condition
     if (gameOver) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawScores();
         ctx.font = '48px Arial';
         ctx.fillStyle = 'black';
         ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
         return;
     }
 
+		
+    drawScores();
+
     ballX += ballSpeedX;
     ballY += ballSpeedY;
+	
+	
+
+	
 
     // Update the game logic to detect when a player scores
     if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
@@ -252,17 +249,24 @@ function restartGame() {
     // Start the game
     draw();
 }
-
+	
+	
+	
 
 // Randomize the initial vertical speed
 function resetBall() {
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
     ballSpeedX = -ballSpeedX;
-    ballSpeedY = Math.random() * 4 - 2;
+
+    // Generate random vertical speed between -2 and 2, excluding values between -0.5 and 0.5
+    do {
+        ballSpeedY = Math.random() * 4 - 2;
+    } while (Math.abs(ballSpeedY) < 0.5);
 }
 
-
+	
+	
 // Add a function to check the win condition
 function checkWinCondition() {
     if (leftPlayerScore >= winningScore || rightPlayerScore >= winningScore) {
@@ -309,9 +313,6 @@ document.addEventListener('keyup', (e) => {
         rightPaddleDown = false;
     }
 });
-
-
-// ...
 
 // Add touch event listeners for mobile devices
 canvas.addEventListener('touchstart', handleTouchStart);
@@ -367,17 +368,22 @@ function handleTouchEnd(e) {
     }
 }
 
-// ...
-
 
 
 // Add an event listener for the start game button
-document.getElementById('startGameButton').addEventListener('click', restartGame);
+let firstClick = true;
+document.getElementById('startGameButton').addEventListener('click', () => {
+    if (firstClick) {
+        startGame();
+        firstClick = false;
+    } else {
+        restartGame();
+    }
+});
 
-// Start the game when the page loads
-startGame();
 
 
+initialDraw();
 
     </script>
 </body>
